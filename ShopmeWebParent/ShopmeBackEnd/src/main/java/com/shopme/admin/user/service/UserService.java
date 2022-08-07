@@ -1,17 +1,21 @@
-package com.shopme.admin.user;
+package com.shopme.admin.user.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.shopme.admin.user.repository.RoleRepository;
+import com.shopme.admin.user.repository.UserRepository;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.Users;
 
 @Service
+@Transactional
 public class UserService {
 
 	
@@ -85,11 +89,18 @@ public class UserService {
 		}
 	}
 	
+	public void delete(Integer id) {
+		Long countedId = userRepository.countById(id);
+		if (countedId == null || countedId == 0) {
+			throw new UsernameNotFoundException("Could not find any user with id " + id);
+		}
+		userRepository.deleteById(id); 
+	}
 	
-	
-	
-	
-	
+
+	public void updateUserEnableStatus(Integer id, boolean enable) {
+		userRepository.updateEnableStatus(id, enable);
+	}
 	
 	
 	

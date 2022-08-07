@@ -1,5 +1,6 @@
-package com.shopme.admin.user;
+package com.shopme.admin.user.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +14,12 @@ public interface UserRepository extends CrudRepository<Users, Integer> {
 	
 	@Query("select u from Users u where u.email = :email")
 	public Users getByEmail(@Param("email") String email);
+	
+	public long countById(Integer id);
+	
+	@Query("Update Users u set u.enable = ?2 where u.id = ?1")
+	@Modifying
+	public void updateEnableStatus(Integer id, boolean enable);
+
 
 }

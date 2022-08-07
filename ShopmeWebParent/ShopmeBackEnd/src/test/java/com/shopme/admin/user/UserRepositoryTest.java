@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
+
+import com.shopme.admin.user.repository.UserRepository;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.Users;
 
@@ -105,10 +107,29 @@ public class UserRepositoryTest {
 //	}
 	
 	
+//	@Test
+//	public void countByIdTest() {
+//		var id = 1;
+//		var countById = userRepository.countById(id);
+//		assertThat(countById).isNotNull().isGreaterThan(0);
+//	}
+//	
+//	
 	
+//	@Test
+//	public void disableTestUser() {
+//		Integer id  = 1;
+//		userRepository.updateEnableStatus(id, false);
+//		
+//	}
 	
-	
-	
+//	
+//	@Test
+//	public void enableTestUser() {
+//		Integer id  = 1;
+//		userRepository.updateEnableStatus(id, true);
+//		
+//	}
 	
 	
 	

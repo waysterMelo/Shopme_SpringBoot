@@ -34,7 +34,7 @@ public class Users {
 	private String lastName;
 	
 	@Column
-	private String photos;
+	private String image;
 	
 	@Column
 	private boolean enable;
@@ -84,14 +84,6 @@ public class Users {
 		this.lastName = lastName;
 	}
 
-	public String getPhotos() {
-		return photos;
-	}
-
-	public void setPhotos(String photos) {
-		this.photos = photos;
-	}
-
 	public boolean isEnable() {
 		return enable;
 	}
@@ -108,6 +100,15 @@ public class Users {
 		this.roles = roles;
 	}
 
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	public Users() {
 		
 	}
@@ -117,6 +118,7 @@ public class Users {
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		
 	}
 	
 	public void addRole(Role role) {
@@ -133,6 +135,8 @@ public class Users {
 		return "Users [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", roles=" + roles + "]";
 	}
+
+
 	
 	
 	
