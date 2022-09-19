@@ -2,10 +2,12 @@ package com.shopme.admin.user.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import com.shopme.common.entity.Users;
 @Service
 @Transactional
 public class UserService {
+	
+	public static final int USER_PER_PAGE = 4;
 
 	
 	@Autowired
@@ -36,7 +40,7 @@ public class UserService {
 		return (List<Role>) roleRepository.findAll();
 	}
 
-	public void save(Users users) {
+	public Users save(Users users) {
 		boolean haveAnUser = (users.getId() != null);
 		
 		if (haveAnUser) {
@@ -53,7 +57,7 @@ public class UserService {
 		}
 		
 		encodePassword(users); 
-		userRepository.save(users);
+		return userRepository.save(users);
 		
 	}
 	
@@ -97,12 +101,21 @@ public class UserService {
 		userRepository.deleteById(id); 
 	}
 	
-
+	
 	public void updateUserEnableStatus(Integer id, boolean enable) {
 		userRepository.updateEnableStatus(id, enable);
 	}
 	
 	
+	public Page<Users> listbyPage(int pageNum, String sortField, String sortDir){
+		
+		Sort sort = Sort.by(sortField);
+		
+		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+		
+		Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE);
+		return userRepository.findAll(pageable);
+	}
 	
 	
 	

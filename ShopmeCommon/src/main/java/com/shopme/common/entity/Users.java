@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import java.beans.Transient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +36,7 @@ public class Users {
 	private String lastName;
 	
 	@Column
-	private String image;
+	private String photo;
 	
 	@Column
 	private boolean enable;
@@ -100,13 +102,12 @@ public class Users {
 		this.roles = roles;
 	}
 
-	
-	public String getImage() {
-		return image;
+	public String getPhoto() {
+		return photo;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public Users() {
@@ -137,6 +138,12 @@ public class Users {
 	}
 
 
+	@Transient
+	public String getPhotosImagePath() {
+		if (id == null || photo == null) return "/images/default.png";
+		return "/user-photos/" + this.id + "/" + this.photo;
+	}
+	
 	
 	
 	

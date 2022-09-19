@@ -1,7 +1,6 @@
 package com.shopme.admin.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +10,15 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
-
 import com.shopme.admin.user.repository.UserRepository;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.Users;
 
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 public class UserRepositoryTest {
@@ -132,7 +133,19 @@ public class UserRepositoryTest {
 //	}
 	
 	
-	
+	@Test
+	public void testListFirstPage() {
+		int pageNumber = 1;
+		int pageSize = 2;
+		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Users> page =  userRepository.findAll(pageable);
+		List<Users> listUsers =  page.getContent();
+		
+		listUsers.forEach(user -> System.out.println(user));
+		
+		assertThat(listUsers.size()).isEqualTo(pageSize); 
+	}
 	
 	
 	
