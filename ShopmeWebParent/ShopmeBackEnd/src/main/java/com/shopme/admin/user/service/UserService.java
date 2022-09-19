@@ -113,7 +113,7 @@ public class UserService {
 		
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 		
-		Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE);
+		Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE, sort);
 		return userRepository.findAll(pageable);
 	}
 	
