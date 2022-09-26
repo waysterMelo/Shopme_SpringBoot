@@ -35,7 +35,7 @@ public class UserController {
 	
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, "firstName", "asc");
+		return listByPage(1, model, "firstName", "asc", null);
 	}
 	
 	//pagina cadastrar user
@@ -70,10 +70,16 @@ public class UserController {
 			service.save(users);
 		}
 		
-		//service.save(users);
+	
 		redirectAttributes.addFlashAttribute("message", "The user has been saved succesfully");
-		//System.out.println(image.getOriginalFilename());
-		return "redirect:/users";
+		
+		return getRedirectUrlToAffectedUser(users);
+	}
+
+	private String getRedirectUrlToAffectedUser(Users users) {
+		String firstPartOfEmail = users.getEmail().split("@")[0];
+		
+		return "redirect:/users/page/1?sortField=id&sortDir=asc&keywords=" + firstPartOfEmail;
 	}
 	
 	@GetMapping("/users/edit/{id}")
@@ -123,11 +129,14 @@ public class UserController {
 	
 	@GetMapping("/users/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir) {
+			@Param("sortField") String sortField,
+			@Param("sortDir") String sortDir, @Param("keywords") String keywords){
 		
 		
-		Page<Users> page = service.listbyPage(pageNum, sortField, sortDir);
+		Page<Users> page = service.listbyPage(pageNum, sortField, sortDir, keywords);
 		List<Users> list = page.getContent();
+		
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		
 		long startCount = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
 		long endCount = startCount + UserService.USER_PER_PAGE - 1;
@@ -143,6 +152,8 @@ public class UserController {
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("sortField", sortField);
+		model.addAttribute("keywords", keywords);
+		model.addAttribute("reverseSortDir", reverseSortDir);
 		return "users";
 	}
 	
